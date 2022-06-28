@@ -4,43 +4,80 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
 
+public class Main {
     public static void main(String[] args) {
         int numPeople = getNumPeople();
         List<List<String>> peopleList = getPeopleList(numPeople);
-        int numQueries = getNumQueries();
-        for (int i = 0; i < numQueries; i++) {
-            query(peopleList);
+        boolean exit = false;
+        while (!exit) {
+            printMenu();
+            String menuChoice = getMenuChoice();
+            switch (menuChoice) {
+                case "1":
+                    query(peopleList);
+                    break;
+                case "2":
+                    printAllPeople(peopleList);
+                    break;
+                case "0":
+                    System.out.println("Bye!");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Incorrect option! Try again.\n");
+                    break;
+            }
         }
+    }
+
+    public static void printAllPeople(List<List<String>> peopleList) {
+        System.out.println("=== List of people ===");
+        for (List<String> people : peopleList) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String word : people) {
+                stringBuilder.append(word).append(" ");
+            }
+            System.out.println(stringBuilder.toString().trim());
+        }
+        System.out.println();
+    }
+
+    public static String getMenuChoice() {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        System.out.println();
+        return input;
+    }
+
+    public static void printMenu() {
+        System.out.print("=== Menu ===\n" +
+                "1. Search information.\n" +
+                "2. Print all people.\n" +
+                "0. Exit.\n");
     }
 
     public static int getNumPeople() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the number of peopleList: ");
+        System.out.println("Enter the number of people: ");
         return scanner.nextInt();
     }
 
     public static List<List<String>> getPeopleList(int numPeople) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter all peopleList:");
+        System.out.println("Enter all people:");
         List<List<String>> peopleList = new ArrayList<>();
         for (int i = 0; i < numPeople; i++) {
             peopleList.add(List.of(scanner.nextLine().split("\\s")));
         }
+        System.out.println();
         return peopleList;
-    }
-
-    public static int getNumQueries() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\nEnter the number of search queries:");
-        return scanner.nextInt();
     }
 
     public static void query(List<List<String>> peopleList) {
         Scanner scanner = new Scanner(System.in);
         List<List<String>> queryResults = new ArrayList<>();
-        System.out.println("\nEnter data to search people:");
+        System.out.println("Enter a name or email to search all suitable people.");
         String searchWord = scanner.nextLine().trim();
         for (List<String> person : peopleList) {
             for (String word : person) {
@@ -53,35 +90,14 @@ public class Main {
         if (queryResults.isEmpty()) {
             System.out.println("No matching people found.");
         } else {
-            System.out.println("\nFound people:");
             for (List<String> entry : queryResults) {
                 StringBuilder stringBuilder = new StringBuilder();
                 for (String element : entry) {
-                    stringBuilder.append(element + " ");
+                    stringBuilder.append(element).append(" ");
                 }
                 System.out.println(stringBuilder.toString().trim());
             }
         }
-    }
-
-
-
-
-
-
-    public static void stage1Implementation() {
-        Scanner scanner = new Scanner(System.in);
-        String[] words = scanner.nextLine().split("\\s");
-        String searchWord = scanner.nextLine();
-        boolean found = false;
-        int index = 0;
-        for (String word : words) {
-            index++;
-            if (word.equals(searchWord)) {
-                found = true;
-                break;
-            }
-        }
-        System.out.println(found ? index : "Not found");
+        System.out.println();
     }
 }
