@@ -1,14 +1,21 @@
 package com.company;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Main {
     public static void main(String[] args) {
-        int numPeople = getNumPeople();
-        List<List<String>> peopleList = getPeopleList(numPeople);
+        List<List<String>> peopleList;
+        if (args.length > 0 && "--data".equals(args[0])) {
+            File file = new File(args[1]);
+            peopleList = getPeopleListFromFile(file);
+        } else {
+            int numPeople = getNumPeople();
+            peopleList = getPeopleList(numPeople);
+        }
         boolean exit = false;
         while (!exit) {
             printMenu();
@@ -71,6 +78,18 @@ public class Main {
             peopleList.add(List.of(scanner.nextLine().split("\\s")));
         }
         System.out.println();
+        return peopleList;
+    }
+
+    public static List<List<String>> getPeopleListFromFile(File file) {
+        List<List<String>> peopleList = new ArrayList<>();
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                peopleList.add(List.of(scanner.nextLine().split("\\s")));
+            }
+        } catch (FileNotFoundException e) {
+            System.out.printf("file not found: %s", file);
+        }
         return peopleList;
     }
 
