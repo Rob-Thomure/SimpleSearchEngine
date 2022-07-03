@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         List<List<String>> peopleList;
         if (args.length > 0 && "--data".equals(args[0])) {
@@ -16,13 +17,16 @@ public class Main {
             int numPeople = getNumPeople();
             peopleList = getPeopleList(numPeople);
         }
+        InvertedIndex invertedIndex = new InvertedIndex(peopleList);
+
+
         boolean exit = false;
         while (!exit) {
             printMenu();
             String menuChoice = getMenuChoice();
             switch (menuChoice) {
                 case "1":
-                    query(peopleList);
+                    query(invertedIndex);
                     break;
                 case "2":
                     printAllPeople(peopleList);
@@ -118,5 +122,27 @@ public class Main {
             }
         }
         System.out.println();
+    }
+
+    public static void query(InvertedIndex invertedIndex) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a name or email to search all suitable people.");
+        String searchWord = scanner.nextLine().trim();
+        List<List<String>> searchResults = invertedIndex.search(searchWord);
+        if (searchResults.isEmpty()) {
+            System.out.println("No matching people found.");
+        } else {
+            System.out.printf("%d persons found:%n", searchResults.size());
+            for (var entry : searchResults) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (var element : entry) {
+                    stringBuilder.append(element).append(" ");
+                }
+                System.out.println(stringBuilder.toString().trim());
+            }
+        }
+        System.out.println();
+
+
     }
 }
