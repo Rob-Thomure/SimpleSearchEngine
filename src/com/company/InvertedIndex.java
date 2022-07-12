@@ -24,14 +24,11 @@ public class InvertedIndex {
         }
     }
 
-    public List<List<String>> search(String keyWord) {
-        List<List<String>> searchResults = new ArrayList<>();
-        if (index.containsKey(keyWord.toLowerCase())) {
-            Set<Integer> indexes = index.get(keyWord.toLowerCase());
-            for (var element : indexes) {
-                searchResults.add(list.get(element));
-            }
-        }
-        return searchResults;
+    public List<List<String>> getList() {
+        return list;
+    }
+
+    public Map<String, Set<Integer>> getIndex() {
+        return index;
     }
 }

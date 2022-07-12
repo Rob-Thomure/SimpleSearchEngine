@@ -9,28 +9,21 @@ public class AllSearchingMethod  implements SearchingMethod{
     public List<List<String>> search(List<List<String>> list, Map<String, Set<Integer>> index, String searchString) {
         List<List<String>> searchResults = new ArrayList<>();
         String[] words = searchString.toLowerCase().split("\\s");
-        Map<String, Set<Integer>> namesMatching = new HashMap<>();
         List<Set<Integer>> matchingIndexes = new ArrayList<>();
         for (String word : words) {
             if (index.containsKey(word)) {
                 matchingIndexes.add(index.get(word));
             }
         }
-        // TODO do a retain all on the list of sets
-
-
-
-
-
-
-        if (index.containsKey(searchString.toLowerCase())) {
-            Set<Integer> indexes = index.get(searchString.toLowerCase());
-            for (var element : indexes) {
-                searchResults.add(list.get(element));
-            }
+        for (int i = 1; i < matchingIndexes.size(); i++) {
+            matchingIndexes.get(0).retainAll(matchingIndexes.get(i));
         }
 
-
+        if (!matchingIndexes.isEmpty()) {
+            for (int indexOfPerson : matchingIndexes.get(0)) {
+                searchResults.add(list.get(indexOfPerson));
+            }
+        }
         return searchResults;
     }
 }
